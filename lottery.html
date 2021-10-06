@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html>
+
+	<script language="javascript">
+		//sort takes in an array and its length and sorts it from lowest to highest
+		function sort(arr, length)
+		{
+			for (i = 0; i < length; i++)
+			{
+				for (j = 0; j < length - 1; j++)
+				{
+					if (parseInt(arr[j]) > parseInt(arr[j + 1]))
+					{
+						temp = arr[j];
+						arr[j] = arr[j + 1];
+						arr[j + 1] = temp;
+					}	
+				}
+			}
+		}
+
+		numbers = [0, 0, 0, 0 ,0];
+		input_numbers = [0, 0, 0, 0, 0];
+		str = prompt("Enter your lottery numbers", "");
+		lucky_input = prompt("Enter your lucky ball", "")
+		counter = 0;
+		spot = 0;
+
+		//Get the input into an array
+		while (spot < str.length)
+		{
+			if (str[spot] == " ")
+			{
+				counter++;
+			}
+			else
+			{
+				input_numbers[counter] += str[spot];
+			}
+			spot++;
+		}
+		sort(input_numbers, 5);
+
+		//output the users numbers onto the screen
+		document.write("Your numbers: ");
+		for(i = 0; i < 5; i++)
+		{
+			document.write(parseInt(input_numbers[i]) + " ");
+		}
+		document.write(" " + "Lucky Ball: " + lucky_input);
+
+		//randomize the numbers
+		for(i = 0; i < 5; i++)
+		{
+			numbers[i] = Math.floor(Math.random() * (49 - 1) + 1);
+		}
+		lucky_ball = Math.floor(Math.random() * (19 - 1) + 1);
+		
+		</script>
+
+		<br>
+
+		<script language="javascript">
+
+		//output the lottery numbers
+		sort(numbers, 5);
+		document.write("Lottery Numbers: ");
+
+		for(i = 0; i < 5; i++)
+		{
+			document.write(parseInt(numbers[i]) + " ");
+		}
+		
+		document.write(" " + "Lucky Ball: " + lucky_ball);
+		
+	</script>
+
+	<br>
+
+	<script language="javascript">
+		//check to see if the lucky ball hit
+		hit_lucky = 0;
+		if (lucky_ball == lucky_input)
+		{
+			hit_lucky = 1;
+		}
+
+		num_hit = 0;
+		//check to see how many matches we have
+		for (i = 0; i < 5; i++)
+		{
+			for (j = 0; j < 5; j++)
+			{
+				if (input_numbers[i] == numbers[j])
+				{
+					num_hit++;
+				}
+			}
+		}
+
+
+
+		document.write(num_hit + " numbers matched!");
+
+	</script>
+
+	<br>
+
+	<script language="javascript">
+		//output whether we hit the lucky ball
+		if (hit_lucky)
+		{
+			document.write("The lucky ball matched!");
+		}
+		else
+		{
+			document.write("The lucky ball did not match.");
+		}
+		
+
+	</script>
+
+	<br>
+
+	<script language="javascript">
+	//cases if we hit the lucky ball
+
+	if (hit_lucky)
+	{
+		switch (num_hit)
+		{
+			case 0: document.write("You won $4!"); break;
+			case 1: document.write("You won $6!"); break;
+			case 2: document.write("You won $25!"); break;
+			case 3: document.write("You won $150!"); break;
+			case 4: document.write("You won $5,000!"); break;
+			case 5: document.write("You won $7,000 a week for life!"); break;
+			default: document.write("You did not win anything :\("); break;
+		}
+	}
+	else
+	{
+		//cases if we dont hit the lucky ball
+		switch (num_hit)
+		{
+			case 2: document.write("You won $3!"); break;
+			case 3: document.write("You won $20!"); break;
+			case 4: document.write("You won $200!"); break;
+			case 5: document.write("You won $25,000 a year for life!"); break;
+			default: document.write("You did not win anything :\("); break;
+		}
+	}
+
+	</script>
+
+</html>
+
+
+
+
+

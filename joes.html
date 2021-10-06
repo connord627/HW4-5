@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+
+	<script language="javascript">
+		var total;
+		arr = [0, 0, 0];
+		prices = [3.75, 2.00, 1.50];
+		arr[0] = prompt("Please enter the number of Hot Dogs","");
+		arr[1] = prompt("Please enter the number of Fries","");
+		arr[2] = prompt("Please enter the number of Sodas","");
+
+		document.write("You bought: " + arr[0] + " Hot Dogs, " + arr[1] + " Fries, and " + arr[2] + " Sodas\n");
+	</script>
+
+	<br>
+
+	<script language="javascript">
+		subtotal = 0;
+		for (i = 0; i < 3; i++)
+		{
+			subtotal += arr[i] * prices[i];
+		}
+		document.write("Your Subtotal is: $" + parseFloat(subtotal).toFixed(2));
+		total = subtotal;
+	</script>
+
+	<br>
+
+	<script language="javascript">
+		var special;
+		if (subtotal >= 20)
+		{
+			discount = (subtotal * 0.1)
+			total -= discount;
+			document.write("Joe's Special Discount!: $" + parseFloat(subtotal).toFixed(2) + " - $" + parseFloat(discount).toFixed(2) + " = $" + parseFloat(total).toFixed(2));
+		}
+	</script>
+
+	<br>
+
+	<script language="javascript">
+		totalbefore = total
+		tax = total * 0.0625;
+		total += tax;
+
+		document.write("Tax: $" + parseFloat(totalbefore).toFixed(2) + " + $" + parseFloat(tax).toFixed(2) + " = $" + parseFloat(total).toFixed(2));
+	</script>
+
+	<br>
+
+	<script language="javascript">
+		document.write("Final Total: $" + parseFloat(total).toFixed(2));
+	</script>
+</html>
