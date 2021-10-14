@@ -4,6 +4,7 @@
 
 	<script language="javascript">
 		//sort takes in an array and its length and sorts it from lowest to highest
+		//this was created before we learned that there is a sort function in the javascript DOM
 		function sort(arr, length)
 		{
 			for (i = 0; i < length; i++)
@@ -28,6 +29,7 @@
 		spot = 0;
 
 		//Get the input into an array
+		//created before we learned about the split function
 		while (spot < str.length)
 		{
 			if (str[spot] == " ")
@@ -65,7 +67,7 @@
 
 		//output the lottery numbers
 		sort(numbers, 5);
-		document.write("Lottery Numbers: ");
+		document.write("Random Numbers: ");
 
 		for(i = 0; i < 5; i++)
 		{
