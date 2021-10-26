@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Jade Delight</title>
+</head>
+
+
+
+<body>
+<script language="javascript">
+
+function MenuItem(name, cost)
+{
+	this.name = name;
+	this.cost=cost;
+}
+
+menuItems = new Array(
+	new MenuItem("Chicken Chop Suey", 4.5),
+	new MenuItem("Sweet and Sour Pork", 6.25),
+	new MenuItem("Shrimp Lo Mein", 5.25),
+	new MenuItem("Moo Shi Chicken", 6.5),
+	new MenuItem("Fried Rice", 2.35)
+);
+
+function makeSelect(name, minRange, maxRange)
+{
+	var t= "";
+	t = "<select name='" + name + "' size='1'>";
+	for (j=minRange; j<=maxRange; j++)
+	   t += "<option>" + j + "</option>";
+	t+= "</select>"; 
+	return t;
+}
+</script>
+
+<h1>Jade Delight</h1>
+
+
+
+
+
+
+<form name="data" onsubmit = "return validate()">
+
+<p>First Name: <input type="text"  name='fname' /></p>
+<p>Last Name*:  <input type="text" id="lname"  name='lname' /></p>
+<p name = "streetp">Street: <input type="text"  name='street' /></p>
+<p name = "cityp">City: <input type="text"  name='city' /></p>
+<p>Phone*: <input type="text"  name='phone' /></p>
+<p> 
+	<input type="radio"  name="p_or_d" value = "pickup" checked="checked"/>Pickup  
+	<input type="radio"  name='p_or_d' value = 'delivery'/>
+	Delivery
+</p>
+<table border="0" cellpadding="3" id="mytable">
+  <tr>
+    <th>Select Item</th>
+    <th>Item Name</th>
+    <th>Cost Each</th>
+    <th>Total Cost</th>
+  </tr>
+<script language="javascript">
+
+  var s = "";
+  for (i=0; i< menuItems.length; i++)
+  {
+	  s += "<tr><td>";
+	  s += makeSelect("quan" + i, 0, 10);
+	  s += "</td><td>" + menuItems[i].name + "</td>";
+	  s += "<td> $ " + menuItems[i].cost.toFixed(2) + "</td>";
+	  s += "<td>$<input type='text' name='cost'/></td></tr>";
+  }
+  document.writeln(s);
+</script>
+</table>
+<p>Subtotal: 
+   $<input type="text"  name='subtotal' id="subtotal" />
+</p>
+<p>Mass tax 6.25%:
+  $ <input type="text"  name='tax' id="tax" />
+</p>
+<p>Total: $ <input type="text"  name='total' id="total" />
+</p>
+
+<input type = "submit" value = "Submit Order" />
+
+</form>
+
+
+
+
+<script language="javascript">
+	/*--------My code--------*/
+
+	var delivery = false;
+
+		//validate
+		function validate()
+		{
+			//check last name
+			last = document.getElementById("lname");
+			if (last.value == "") // check if field is blank
+			{
+				alert("Must enter a value for the last name"); // tell user what is wrong
+				document.getElementById("lname").focus(); // put cursor in text box
+				document.getElementById("lname").select(); // highlight text in the box
+				return false;
+			}
+
+			phone = document.getElementsByName("phone")[0];
+
+			/*-----------NOTE: this regex expression below was found on: 
+			https://stackoverflow.com/questions/4338267/validate-phone-number-with-javascript
+			It supports many different ways someone could enter in a phone number------------*/
+
+			valphone = new RegExp(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im);
+			if (phone.value == "" || !valphone.test(phone.value))
+			{
+				alert("Must enter a valid phone number");
+				document.getElementsByName("phone")[0].focus();
+				document.getElementsByName("phone")[0].select();
+				return false;
+			}
+
+			if (document.getElementsByName("quan0")[0].selectedIndex == 0 && document.getElementsByName("quan1")[0].selectedIndex == 0 && document.getElementsByName("quan2")[0].selectedIndex == 0 && document.getElementsByName("quan3")[0].selectedIndex == 0 && document.getElementsByName("quan4")[0].selectedIndex == 0)
+			{
+				alert("Must order at least one item");
+				//validate = false;
+				return false;
+			}
+			
+
+			//check for street only if we chose delivery
+			street = document.getElementsByName("street")[0];
+			if (delivery && street.value == "")
+			{
+				alert("Must enter a value for the street");
+				document.getElementsByName("street")[0].focus();
+				document.getElementsByName("street")[0].select();
+				return false;
+			}
+
+
+			//check for city only if we chose delivery
+			city = document.getElementsByName("city")[0];
+			if (delivery && city.value == "")
+			{
+				alert("Must enter a value for the street");
+				document.getElementsByName("city")[0].focus();
+				document.getElementsByName("city")[0].select();
+				return false;
+			}
+
+			//build the string to output
+			strout = "Thanks for ordering! Your order will be ready at: ";
+
+			//15 minutes if pickup
+			if (!delivery)
+			{
+
+				var timeobj = new Date();
+				timeobj.setMinutes(timeobj.getMinutes() + 15);
+				time = timeobj.toLocaleTimeString('en-US');
+				strout += time;
+			}
+			//30 minutes if delivery
+			else
+			{
+				var timeobj = new Date();
+				timeobj.setMinutes(timeobj.getMinutes() + 30);
+				time = timeobj.toLocaleTimeString('en-US');
+				strout += time;
+			}
+
+			if (document.getElementsByName("quan0")[0].selectedIndex > 0)
+			{
+				strout += "\n" + document.getElementsByName("quan0")[0].selectedIndex + " orders of Chicken Chop Suey"	
+			}
+
+			if (document.getElementsByName("quan1")[0].selectedIndex > 0)
+			{
+				strout += "\n" + document.getElementsByName("quan1")[0].selectedIndex + " orders of Sweet and Sour Pork"	
+			}
+
+			if (document.getElementsByName("quan2")[0].selectedIndex > 0)
+			{
+				strout += "\n" + document.getElementsByName("quan2")[0].selectedIndex + " orders of Shrimp Lo Mein"	
+			}
+
+			if (document.getElementsByName("quan3")[0].selectedIndex > 0)
+			{
+				strout += "\n" + document.getElementsByName("quan3")[0].selectedIndex + " orders of Moo Shi Chicken"	
+			}
+
+			if (document.getElementsByName("quan4")[0].selectedIndex > 0)
+			{
+				strout += "\n" + document.getElementsByName("quan4")[0].selectedIndex + " orders of Fried Rice"	
+			}
+
+			strout += "\nYour total is: " + document.getElementsByName("total")[0].value;
+			alert(strout);
+		
+
+			return true;
+		
+	}
+
+	window.onload = function()
+	{
+
+		//hide the street and city fields and change if they are clicked
+		
+		streetp = document.getElementsByName("streetp")[0];
+		cityp = document.getElementsByName("cityp")[0];
+		console.log(streetp);
+		streetp.style.display = "none";
+		cityp.style.display = "none";
+
+		pickupobj = document.getElementsByName("p_or_d")[0];
+		deliveryobj = document.getElementsByName("p_or_d")[1];
+		console.log(deliveryobj);
+
+		deliveryobj.onchange = function()
+		{
+			streetp.style.display = "block";
+			cityp.style.display = "block";
+			delivery = true;
+		}
+
+		pickupobj.onchange = function()
+		{
+			streetp.style.display = "none";
+			cityp.style.display = "none";
+			delivery = false;
+		}
+
+
+
+
+		
+
+
+		//code to change the values in the boxes based on the amount of items selected
+		var firstsel = document.getElementsByName("quan0")[0];
+		var secondsel = document.getElementsByName("quan1")[0];
+		var thirdsel = document.getElementsByName("quan2")[0];
+		var fourthsel = document.getElementsByName("quan3")[0];
+		var fifthsel = document.getElementsByName("quan4")[0];
+		val1 = 0;
+		val2 = 0;
+		val3 = 0;
+		val4 = 0;
+		val5 = 0;
+		firstsel.onchange = function()
+		{
+			//value for cost box
+			val1 = 4.5 * firstsel.selectedIndex;
+			var box = document.getElementsByName("cost")[0];
+			box.value = parseFloat(val1).toFixed(2);
+
+			//value for subtotal box
+			subtotal = val1 + val2 + val3 + val4 + val5;
+			var subtotalobj = document.getElementsByName("subtotal")[0];
+			subtotalobj.value = parseFloat(subtotal).toFixed(2);
+
+			//value for tax box
+			var tax = subtotal * 0.0625;
+			var taxobj = document.getElementsByName("tax")[0];
+			taxobj.value = parseFloat(tax).toFixed(2);
+
+			//value for total price box
+			total = subtotal + tax;
+			var totalobj = document.getElementsByName("total")[0];
+			totalobj.value = parseFloat(total).toFixed(2);
+		}
+
+		secondsel.onchange = function()
+		{
+			//value for cost box
+			val2 = 6.25 * secondsel.selectedIndex;
+			var box = document.getElementsByName("cost")[1];
+			box.value = parseFloat(val2).toFixed(2);
+
+			//value for subtotal box
+			subtotal = val1 + val2 + val3 + val4 + val5;
+			var subtotalobj = document.getElementsByName("subtotal")[0];
+			subtotalobj.value = parseFloat(subtotal).toFixed(2);
+
+			//value for tax box
+			var tax = subtotal * 0.0625;
+			var taxobj = document.getElementsByName("tax")[0];
+			taxobj.value = parseFloat(tax).toFixed(2);
+
+			//value for total price box
+			total = subtotal + tax;
+			var totalobj = document.getElementsByName("total")[0];
+			totalobj.value = parseFloat(total).toFixed(2);
+		}
+
+		thirdsel.onchange = function()
+		{
+			val3 = 5.25 * thirdsel.selectedIndex;
+			var box = document.getElementsByName("cost")[2];
+			box.value = parseFloat(val3).toFixed(2);
+
+			//value for subtotal box
+			subtotal = val1 + val2 + val3 + val4 + val5;
+			var subtotalobj = document.getElementsByName("subtotal")[0];
+			subtotalobj.value = parseFloat(subtotal).toFixed(2);
+
+			//value for tax box
+			var tax = subtotal * 0.0625;
+			var taxobj = document.getElementsByName("tax")[0];
+			taxobj.value = parseFloat(tax).toFixed(2);
+
+			//value for total price box
+			total = subtotal + tax;
+			var totalobj = document.getElementsByName("total")[0];
+			totalobj.value = parseFloat(total).toFixed(2);
+		}
+
+		fourthsel.onchange = function()
+		{
+			val4 = 6.5 * fourthsel.selectedIndex;
+			var box = document.getElementsByName("cost")[3];
+			box.value = parseFloat(val4).toFixed(2);
+
+			//value for subtotal box
+			subtotal = val1 + val2 + val3 + val4 + val5;
+			var subtotalobj = document.getElementsByName("subtotal")[0];
+			subtotalobj.value = parseFloat(subtotal).toFixed(2);
+
+			//value for tax box
+			var tax = subtotal * 0.0625;
+			var taxobj = document.getElementsByName("tax")[0];
+			taxobj.value = parseFloat(tax).toFixed(2);
+
+			//value for total price box
+			total = subtotal + tax;
+			var totalobj = document.getElementsByName("total")[0];
+			totalobj.value = parseFloat(total).toFixed(2);
+		}
+
+		fifthsel.onchange = function()
+		{
+			//value for cost box
+			val5 = 2.35 * fifthsel.selectedIndex;
+			var box = document.getElementsByName("cost")[4];
+			box.value = parseFloat(val5).toFixed(2);
+
+			//value for subtotal box
+			subtotal = val1 + val2 + val3 + val4 + val5;
+			var subtotalobj = document.getElementsByName("subtotal")[0];
+			subtotalobj.value = parseFloat(subtotal).toFixed(2);
+
+			//value for tax box
+			var tax = subtotal * 0.0625;
+			var taxobj = document.getElementsByName("tax")[0];
+			taxobj.value = parseFloat(tax).toFixed(2);
+
+			//value for total price box
+			total = subtotal + tax;
+			var totalobj = document.getElementsByName("total")[0];
+			totalobj.value = parseFloat(total).toFixed(2);
+		}
+
+
+	}
+
+</script>
+</body>
+</html>
